@@ -1,3 +1,4 @@
+"use client"
 import { useState } from 'react';
 
 export default function PrescriptionForm() {
@@ -38,12 +39,12 @@ export default function PrescriptionForm() {
 
             <div className="max-w-4xl mx-auto bg-white shadow-md rounded-lg p-6">
                 <header className="flex items-center justify-between">
-                    <img src="/pic/left.png" alt="Left Logo" className="h-16" />
+                    <img src="logo/left.png" alt="Left Logo" className="h-16" />
                     <div className="text-center font-bold text-xl">
                         មន្ទីរពហុព្យាបាល​ សុខ លាភ មេត្រី<br />
                         SOK LEAP METREY POLYCLINIC
                     </div>
-                    <img src="/pic/right.png" alt="Right Logo" className="h-16" />
+                    <img src="/logo/right.png" alt="Right Logo" className="h-16" />
                 </header>
 
                 <h1 className="text-2xl font-bold my-6 text-center">Prescription Form</h1>
