@@ -1,17 +1,22 @@
-// pages/login.js
+"use client"
 import {useState} from 'react';
+import { useRouter } from 'next/navigation'; // ✅ App Router
 import Head from 'next/head';
 import Image from 'next/image';
 
 export default function Login() {
+    const router = useRouter();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [showPassword, setShowPassword] = useState(false);
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        // Handle login logic here
-        console.log({email, password});
+        if (email === 'sokleap01@gmail.com' && password === '1234') {
+            router.push('/prescription');
+        } else {
+            alert('Invalid email or password');
+        }
     };
 
     return (
