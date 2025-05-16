@@ -1,0 +1,34 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model medicine {
+  id             Int          @id @default(autoincrement())
+  name           String
+  morning        String?
+  afternoon      String?
+  evening        String?
+  night          String?
+  quantity       String
+  instructions   String
+  prescriptionId Int
+  prescription   prescription @relation(fields: [prescriptionId], references: [id], map: "Medicine_prescriptionId_fkey")
+
+  @@index([prescriptionId], map: "Medicine_prescriptionId_fkey")
+}
+
+model prescription {
+  id          Int        @id @default(autoincrement())
+  patientName String
+  gender      String
+  age         Int
+  diagnosis   String
+  createdAt   DateTime   @default(now())
+  medicine    medicine[]
+}
