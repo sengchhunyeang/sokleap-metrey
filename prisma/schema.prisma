@@ -1,0 +1,100 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  password  String
+  name      String
+  role      Role     @default(STAFF)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Doctor {
+  id            String         @id @default(cuid())
+  name          String
+  specialty     String?
+  phone         String?
+  isActive      Boolean        @default(true)
+  prescriptions Prescription[]
+  createdAt     DateTime       @default(now())
+}
+
+model Patient {
+  id             String         @id @default(cuid())
+  nssfId         String?        @unique
+  nationalIdCard String?
+  nameLatin      String?
+  khmerName      String?
+  name           String
+  gender         Gender
+  age            Int
+  phone          String?
+  address        String?
+  enterprise     String?
+  prescriptions  Prescription[]
+  createdAt      DateTime       @default(now())
+  updatedAt      DateTime       @updatedAt
+
+  @@index([nssfId])
+  @@index([nameLatin])
+  @@index([khmerName])
+}
+
+model Prescription {
+  id              String                 @id @default(cuid())
+  patient         Patient                @relation(fields: [patientId], references: [id])
+  patientId       String
+  doctor          Doctor                 @relation(fields: [doctorId], references: [id])
+  doctorId        String
+  diagnosis       String
+  appointmentDate DateTime?
+  medicines       PrescriptionMedicine[]
+  createdAt       DateTime               @default(now())
+}
+
+model Medicine {
+  id            String                 @id @default(cuid())
+  name          String                 @unique
+  description   String?
+  costUSD       Float?
+  costKHR       Float?
+  prescriptions PrescriptionMedicine[]
+}
+
+model Diagnosis {
+  id   String @id @default(cuid())
+  name String @unique
+}
+
+model PrescriptionMedicine {
+  id             String       @id @default(cuid())
+  prescription   Prescription @relation(fields: [prescriptionId], references: [id], onDelete: Cascade)
+  prescriptionId String
+  medicine       Medicine     @relation(fields: [medicineId], references: [id])
+  medicineId     String
+  morning        String?
+  afternoon      String?
+  evening        String?
+  night          String?
+  quantity       String
+  instructions   String?
+}
+
+enum Role {
+  ADMIN
+  STAFF
+}
+
+enum Gender {
+  MALE
+  FEMALE
+  OTHER
+}

@@ -1,0 +1,29 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(node scripts/import-patients.js:*)",
+      "Bash(npm run dev:*)",
+      "Bash(wmic logicaldisk get:*)",
+      "Bash(findstr:*)",
+      "Bash(dir /a \"D:\\\\Testing\\\\sokleap-metrey\\\\node_modules\")",
+      "Bash(npm install:*)",
+      "Bash(curl:*)",
+      "Bash(npx prisma db push:*)",
+      "Bash(powershell -Command \"Test-NetConnection -ComputerName pg-7622800-chhunyeangseng-7685.d.aivencloud.com -Port 28535\")",
+      "Bash(timeout /t 10 /nobreak)",
+      "Bash(npx prisma generate:*)",
+      "Bash(npm run db:seed:*)",
+      "Bash(npx shadcn@latest init)",
+      "Bash(npx shadcn@latest init --defaults)",
+      "Bash(npx shadcn@latest add button card input label table dialog select textarea badge -y)",
+      "Bash(npx shadcn@latest add:*)",
+      "Bash(powershell -Command \"Get-Process -Name node -ErrorAction SilentlyContinue | Stop-Process -Force; Get-NetTCPConnection -LocalPort 3000,3001,3002,3003 -ErrorAction SilentlyContinue | ForEach-Object { Stop-Process -Id $_OwningProcess -Force -ErrorAction SilentlyContinue }\")",
+      "Bash(npm run build:*)",
+      "Bash(npm run db:push:*)",
+      "Bash(npx kill-port:*)",
+      "Bash(Get-Content \"D:\\\\Testing\\\\sokleap-metrey\\\\Diagnosis_List.csv\")",
+      "Bash(Measure-Object -Line)",
+      "Bash(npm run db:import-diagnoses:*)"
+    ]
+  }
+}
