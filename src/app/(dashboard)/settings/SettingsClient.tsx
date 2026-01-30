@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { Users, UserCheck, Package, User, Search, FileText } from 'react-feather';
 import {
   Button,
@@ -12,111 +12,86 @@ import {
   Tabs,
   FileUpload,
   Alert,
-  Loading,
   Pagination,
 } from '@/app/components/ui';
+import { CardHeader, CardTitle } from '@/app/components/ui/Card';
+import { TableHead, TableBody, TableRow, TableTh, TableTd, TableEmpty } from '@/app/components/ui/Table';
 
-export default function SettingsPage() {
+interface SettingsInitialData {
+  doctors: any[];
+  doctorCount: number;
+  doctorTotalPages: number;
+  medicines: any[];
+  medicineCount: number;
+  medicineTotalPages: number;
+  users: any[];
+  userCount: number;
+  userTotalPages: number;
+  patients: any[];
+  patientCount: number;
+  patientTotalPages: number;
+  diagnoses: any[];
+  diagnosisCount: number;
+  diagnosisTotalPages: number;
+}
+
+interface SettingsClientProps {
+  initialData: SettingsInitialData;
+}
+
+export default function SettingsClient({ initialData }: SettingsClientProps) {
   const [activeTab, setActiveTab] = useState('patients');
 
   // Doctors state
-  const [doctors, setDoctors] = useState([]);
-  const [doctorCount, setDoctorCount] = useState(0);
+  const [doctors, setDoctors] = useState(initialData.doctors);
+  const [doctorCount, setDoctorCount] = useState(initialData.doctorCount);
   const [doctorPage, setDoctorPage] = useState(1);
-  const [doctorTotalPages, setDoctorTotalPages] = useState(1);
+  const [doctorTotalPages, setDoctorTotalPages] = useState(initialData.doctorTotalPages);
   const [doctorSearch, setDoctorSearch] = useState('');
 
   // Medicines state
-  const [medicines, setMedicines] = useState([]);
-  const [medicineCount, setMedicineCount] = useState(0);
+  const [medicines, setMedicines] = useState(initialData.medicines);
+  const [medicineCount, setMedicineCount] = useState(initialData.medicineCount);
   const [medicinePage, setMedicinePage] = useState(1);
-  const [medicineTotalPages, setMedicineTotalPages] = useState(1);
+  const [medicineTotalPages, setMedicineTotalPages] = useState(initialData.medicineTotalPages);
   const [medicineSearch, setMedicineSearch] = useState('');
 
   // Users state
-  const [users, setUsers] = useState([]);
-  const [userCount, setUserCount] = useState(0);
+  const [users, setUsers] = useState(initialData.users);
+  const [userCount, setUserCount] = useState(initialData.userCount);
   const [userPage, setUserPage] = useState(1);
-  const [userTotalPages, setUserTotalPages] = useState(1);
+  const [userTotalPages, setUserTotalPages] = useState(initialData.userTotalPages);
   const [userSearch, setUserSearch] = useState('');
 
   // Patients state
-  const [patients, setPatients] = useState([]);
-  const [patientCount, setPatientCount] = useState(0);
+  const [patients, setPatients] = useState(initialData.patients);
+  const [patientCount, setPatientCount] = useState(initialData.patientCount);
   const [patientPage, setPatientPage] = useState(1);
-  const [patientTotalPages, setPatientTotalPages] = useState(1);
+  const [patientTotalPages, setPatientTotalPages] = useState(initialData.patientTotalPages);
   const [patientSearch, setPatientSearch] = useState('');
 
   // Diagnoses state
-  const [diagnoses, setDiagnoses] = useState([]);
-  const [diagnosisCount, setDiagnosisCount] = useState(0);
+  const [diagnoses, setDiagnoses] = useState(initialData.diagnoses);
+  const [diagnosisCount, setDiagnosisCount] = useState(initialData.diagnosisCount);
   const [diagnosisPage, setDiagnosisPage] = useState(1);
-  const [diagnosisTotalPages, setDiagnosisTotalPages] = useState(1);
+  const [diagnosisTotalPages, setDiagnosisTotalPages] = useState(initialData.diagnosisTotalPages);
   const [diagnosisSearch, setDiagnosisSearch] = useState('');
-
-  const [loading, setLoading] = useState(true);
 
   // Form states
   const [showDoctorForm, setShowDoctorForm] = useState(false);
   const [showMedicineForm, setShowMedicineForm] = useState(false);
   const [showUserForm, setShowUserForm] = useState(false);
   const [showDiagnosisForm, setShowDiagnosisForm] = useState(false);
-  const [editingItem, setEditingItem] = useState(null);
+  const [editingItem, setEditingItem] = useState<any>(null);
 
   // Patient import states
   const [importing, setImporting] = useState(false);
-  const [importResult, setImportResult] = useState(null);
-
-  useEffect(() => {
-    fetchAllData();
-  }, []);
-
-  async function fetchAllData() {
-    setLoading(true);
-    try {
-      const [doctorsRes, medicinesRes, usersRes, patientsRes, diagnosesRes] = await Promise.all([
-        fetch('/api/doctors?page=1&limit=10'),
-        fetch('/api/medicines?page=1&limit=20'),
-        fetch('/api/users?page=1&limit=10'),
-        fetch('/api/patients?page=1&limit=10'),
-        fetch('/api/diagnoses?page=1&limit=20'),
-      ]);
-
-      const doctorsData = await doctorsRes.json();
-      setDoctors(doctorsData.doctors || []);
-      setDoctorCount(doctorsData.total || 0);
-      setDoctorTotalPages(doctorsData.totalPages || 1);
-
-      const medicinesData = await medicinesRes.json();
-      setMedicines(medicinesData.medicines || []);
-      setMedicineCount(medicinesData.total || 0);
-      setMedicineTotalPages(medicinesData.totalPages || 1);
-
-      const usersData = await usersRes.json();
-      setUsers(usersData.users || []);
-      setUserCount(usersData.total || 0);
-      setUserTotalPages(usersData.totalPages || 1);
-
-      const patientsData = await patientsRes.json();
-      setPatients(patientsData.patients || []);
-      setPatientCount(patientsData.pagination?.total || 0);
-      setPatientTotalPages(patientsData.pagination?.totalPages || 1);
-
-      const diagnosesData = await diagnosesRes.json();
-      setDiagnoses(diagnosesData.diagnoses || []);
-      setDiagnosisCount(diagnosesData.total || 0);
-      setDiagnosisTotalPages(diagnosesData.totalPages || 1);
-    } catch (error) {
-      console.error('Error fetching data:', error);
-    } finally {
-      setLoading(false);
-    }
-  }
+  const [importResult, setImportResult] = useState<any>(null);
 
   // Patients fetch
   async function fetchPatients(page = 1, search = '') {
     try {
-      const params = new URLSearchParams({ page, limit: 10 });
+      const params = new URLSearchParams({ page: page.toString(), limit: '10' });
       if (search) params.append('search', search);
       const res = await fetch(`/api/patients?${params}`);
       const data = await res.json();
@@ -129,7 +104,7 @@ export default function SettingsPage() {
     }
   }
 
-  const handlePatientSearch = (e) => {
+  const handlePatientSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     setPatientSearch(value);
     setPatientPage(1);
@@ -139,7 +114,7 @@ export default function SettingsPage() {
   // Doctors fetch
   async function fetchDoctors(page = 1, search = '') {
     try {
-      const params = new URLSearchParams({ page, limit: 10 });
+      const params = new URLSearchParams({ page: page.toString(), limit: '10' });
       if (search) params.append('search', search);
       const res = await fetch(`/api/doctors?${params}`);
       const data = await res.json();
@@ -152,7 +127,7 @@ export default function SettingsPage() {
     }
   }
 
-  const handleDoctorSearch = (e) => {
+  const handleDoctorSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     setDoctorSearch(value);
     setDoctorPage(1);
@@ -162,7 +137,7 @@ export default function SettingsPage() {
   // Medicines fetch
   async function fetchMedicines(page = 1, search = '') {
     try {
-      const params = new URLSearchParams({ page, limit: 20 });
+      const params = new URLSearchParams({ page: page.toString(), limit: '20' });
       if (search) params.append('search', search);
       const res = await fetch(`/api/medicines?${params}`);
       const data = await res.json();
@@ -175,7 +150,7 @@ export default function SettingsPage() {
     }
   }
 
-  const handleMedicineSearch = (e) => {
+  const handleMedicineSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     setMedicineSearch(value);
     setMedicinePage(1);
@@ -185,7 +160,7 @@ export default function SettingsPage() {
   // Users fetch
   async function fetchUsers(page = 1, search = '') {
     try {
-      const params = new URLSearchParams({ page, limit: 10 });
+      const params = new URLSearchParams({ page: page.toString(), limit: '10' });
       if (search) params.append('search', search);
       const res = await fetch(`/api/users?${params}`);
       const data = await res.json();
@@ -198,7 +173,7 @@ export default function SettingsPage() {
     }
   }
 
-  const handleUserSearch = (e) => {
+  const handleUserSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     setUserSearch(value);
     setUserPage(1);
@@ -208,7 +183,7 @@ export default function SettingsPage() {
   // Diagnoses fetch
   async function fetchDiagnoses(page = 1, search = '') {
     try {
-      const params = new URLSearchParams({ page, limit: 20 });
+      const params = new URLSearchParams({ page: page.toString(), limit: '20' });
       if (search) params.append('search', search);
       const res = await fetch(`/api/diagnoses?${params}`);
       const data = await res.json();
@@ -221,7 +196,7 @@ export default function SettingsPage() {
     }
   }
 
-  const handleDiagnosisSearch = (e) => {
+  const handleDiagnosisSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     setDiagnosisSearch(value);
     setDiagnosisPage(1);
@@ -229,7 +204,7 @@ export default function SettingsPage() {
   };
 
   // Patient import handler
-  const handleFileUpload = async (file) => {
+  const handleFileUpload = async (file: File) => {
     setImporting(true);
     setImportResult(null);
 
@@ -248,7 +223,7 @@ export default function SettingsPage() {
       if (result.success) {
         fetchPatients(patientPage, patientSearch);
       }
-    } catch (error) {
+    } catch (error: any) {
       setImportResult({ error: 'Failed to upload file: ' + error.message });
     } finally {
       setImporting(false);
@@ -256,9 +231,9 @@ export default function SettingsPage() {
   };
 
   // Doctor handlers
-  const handleSaveDoctor = async (e) => {
+  const handleSaveDoctor = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const formData = new FormData(e.target);
+    const formData = new FormData(e.currentTarget);
     const data = {
       name: formData.get('name'),
       specialty: formData.get('specialty'),
@@ -278,14 +253,14 @@ export default function SettingsPage() {
         fetchDoctors(doctorPage, doctorSearch);
         setShowDoctorForm(false);
         setEditingItem(null);
-        e.target.reset();
+        (e.target as HTMLFormElement).reset();
       }
     } catch (error) {
       console.error('Error saving doctor:', error);
     }
   };
 
-  const handleDeleteDoctor = async (id) => {
+  const handleDeleteDoctor = async (id: string) => {
     if (!confirm('Are you sure you want to delete this doctor?')) return;
     try {
       const res = await fetch(`/api/doctors/${id}`, { method: 'DELETE' });
@@ -298,14 +273,14 @@ export default function SettingsPage() {
   };
 
   // Medicine handlers
-  const handleSaveMedicine = async (e) => {
+  const handleSaveMedicine = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const formData = new FormData(e.target);
+    const formData = new FormData(e.currentTarget);
     const data = {
       name: formData.get('name'),
       description: formData.get('description'),
-      costUSD: parseFloat(formData.get('costUSD')) || 0,
-      costKHR: parseFloat(formData.get('costKHR')) || 0,
+      costUSD: parseFloat(formData.get('costUSD') as string) || 0,
+      costKHR: parseFloat(formData.get('costKHR') as string) || 0,
     };
 
     try {
@@ -320,14 +295,14 @@ export default function SettingsPage() {
         fetchMedicines(medicinePage, medicineSearch);
         setShowMedicineForm(false);
         setEditingItem(null);
-        e.target.reset();
+        (e.target as HTMLFormElement).reset();
       }
     } catch (error) {
       console.error('Error saving medicine:', error);
     }
   };
 
-  const handleDeleteMedicine = async (id) => {
+  const handleDeleteMedicine = async (id: string) => {
     if (!confirm('Are you sure you want to delete this medicine?')) return;
     try {
       const res = await fetch(`/api/medicines/${id}`, { method: 'DELETE' });
@@ -340,10 +315,10 @@ export default function SettingsPage() {
   };
 
   // User handlers
-  const handleSaveUser = async (e) => {
+  const handleSaveUser = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const formData = new FormData(e.target);
-    const data = {
+    const formData = new FormData(e.currentTarget);
+    const data: any = {
       name: formData.get('name'),
       email: formData.get('email'),
       role: formData.get('role'),
@@ -364,14 +339,14 @@ export default function SettingsPage() {
         fetchUsers(userPage, userSearch);
         setShowUserForm(false);
         setEditingItem(null);
-        e.target.reset();
+        (e.target as HTMLFormElement).reset();
       }
     } catch (error) {
       console.error('Error saving user:', error);
     }
   };
 
-  const handleDeleteUser = async (id) => {
+  const handleDeleteUser = async (id: string) => {
     if (!confirm('Are you sure you want to delete this user?')) return;
     try {
       const res = await fetch(`/api/users/${id}`, { method: 'DELETE' });
@@ -384,9 +359,9 @@ export default function SettingsPage() {
   };
 
   // Diagnosis handlers
-  const handleSaveDiagnosis = async (e) => {
+  const handleSaveDiagnosis = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const formData = new FormData(e.target);
+    const formData = new FormData(e.currentTarget);
     const data = {
       name: formData.get('name'),
     };
@@ -403,14 +378,14 @@ export default function SettingsPage() {
         fetchDiagnoses(diagnosisPage, diagnosisSearch);
         setShowDiagnosisForm(false);
         setEditingItem(null);
-        e.target.reset();
+        (e.target as HTMLFormElement).reset();
       }
     } catch (error) {
       console.error('Error saving diagnosis:', error);
     }
   };
 
-  const handleDeleteDiagnosis = async (id) => {
+  const handleDeleteDiagnosis = async (id: string) => {
     if (!confirm('Are you sure you want to delete this diagnosis?')) return;
     try {
       const res = await fetch(`/api/diagnoses/${id}`, { method: 'DELETE' });
@@ -430,7 +405,7 @@ export default function SettingsPage() {
     { id: 'users', label: 'Users', icon: User, count: userCount },
   ];
 
-  const handleTabChange = (tabId) => {
+  const handleTabChange = (tabId: string) => {
     setActiveTab(tabId);
     setShowDoctorForm(false);
     setShowMedicineForm(false);
@@ -439,10 +414,6 @@ export default function SettingsPage() {
     setEditingItem(null);
     setImportResult(null);
   };
-
-  if (loading) {
-    return <Loading text="Loading settings..." />;
-  }
 
   return (
     <div>
@@ -453,9 +424,9 @@ export default function SettingsPage() {
       {/* Patients Tab */}
       {activeTab === 'patients' && (
         <Card>
-          <Card.Header>
-            <Card.Title>Import Patients from Excel</Card.Title>
-          </Card.Header>
+          <CardHeader>
+            <CardTitle>Import Patients from Excel</CardTitle>
+          </CardHeader>
 
           <FileUpload
             accept=".xlsx,.xls"
@@ -493,7 +464,6 @@ export default function SettingsPage() {
             Patients ({patientCount} total)
           </h3>
 
-          {/* Search Box */}
           <div className="mb-4">
             <div className="relative">
               <Search size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-[#ABAFB1]" />
@@ -508,42 +478,42 @@ export default function SettingsPage() {
           </div>
 
           <Table>
-            <Table.Head>
+            <TableHead>
               <tr>
-                <Table.Th>NSSF ID</Table.Th>
-                <Table.Th>Name (Latin)</Table.Th>
-                <Table.Th>Khmer Name</Table.Th>
-                <Table.Th>Gender</Table.Th>
-                <Table.Th>Age</Table.Th>
+                <TableTh>NSSF ID</TableTh>
+                <TableTh>Name (Latin)</TableTh>
+                <TableTh>Khmer Name</TableTh>
+                <TableTh>Gender</TableTh>
+                <TableTh>Age</TableTh>
               </tr>
-            </Table.Head>
-            <Table.Body>
+            </TableHead>
+            <TableBody>
               {patients.length > 0 ? (
-                patients.map((patient) => (
-                  <Table.Row key={patient.id}>
-                    <Table.Td bold>{patient.nssfId || '-'}</Table.Td>
-                    <Table.Td>{patient.nameLatin || patient.name}</Table.Td>
-                    <Table.Td>{patient.khmerName || '-'}</Table.Td>
-                    <Table.Td>
+                patients.map((patient: any) => (
+                  <TableRow key={patient.id}>
+                    <TableTd bold>{patient.nssfId || '-'}</TableTd>
+                    <TableTd>{patient.nameLatin || patient.name}</TableTd>
+                    <TableTd>{patient.khmerName || '-'}</TableTd>
+                    <TableTd>
                       <Badge variant={patient.gender === 'MALE' ? 'pending' : 'success'}>
                         {patient.gender}
                       </Badge>
-                    </Table.Td>
-                    <Table.Td>{patient.age}</Table.Td>
-                  </Table.Row>
+                    </TableTd>
+                    <TableTd>{patient.age}</TableTd>
+                  </TableRow>
                 ))
               ) : (
-                <Table.Empty colSpan={5}>
+                <TableEmpty colSpan={5}>
                   No patients found. Upload an Excel file to import patients.
-                </Table.Empty>
+                </TableEmpty>
               )}
-            </Table.Body>
+            </TableBody>
           </Table>
 
           <Pagination
             currentPage={patientPage}
             totalPages={patientTotalPages}
-            onPageChange={(page) => fetchPatients(page, patientSearch)}
+            onPageChange={(page: number) => fetchPatients(page, patientSearch)}
           />
         </Card>
       )}
@@ -551,14 +521,13 @@ export default function SettingsPage() {
       {/* Doctors Tab */}
       {activeTab === 'doctors' && (
         <Card>
-          <Card.Header>
-            <Card.Title>Manage Doctors ({doctorCount})</Card.Title>
+          <CardHeader>
+            <CardTitle>Manage Doctors ({doctorCount})</CardTitle>
             <Button onClick={() => { setShowDoctorForm(!showDoctorForm); setEditingItem(null); }}>
               {showDoctorForm ? 'Cancel' : '+ Add Doctor'}
             </Button>
-          </Card.Header>
+          </CardHeader>
 
-          {/* Search Box */}
           <div className="mb-4">
             <div className="relative">
               <Search size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-[#ABAFB1]" />
@@ -595,28 +564,28 @@ export default function SettingsPage() {
           )}
 
           <Table>
-            <Table.Head>
+            <TableHead>
               <tr>
-                <Table.Th>Name</Table.Th>
-                <Table.Th>Specialty</Table.Th>
-                <Table.Th>Phone</Table.Th>
-                <Table.Th>Status</Table.Th>
-                <Table.Th>Actions</Table.Th>
+                <TableTh>Name</TableTh>
+                <TableTh>Specialty</TableTh>
+                <TableTh>Phone</TableTh>
+                <TableTh>Status</TableTh>
+                <TableTh>Actions</TableTh>
               </tr>
-            </Table.Head>
-            <Table.Body>
+            </TableHead>
+            <TableBody>
               {doctors.length > 0 ? (
-                doctors.map((doctor) => (
-                  <Table.Row key={doctor.id}>
-                    <Table.Td bold>{doctor.name}</Table.Td>
-                    <Table.Td>{doctor.specialty || '-'}</Table.Td>
-                    <Table.Td>{doctor.phone || '-'}</Table.Td>
-                    <Table.Td>
+                doctors.map((doctor: any) => (
+                  <TableRow key={doctor.id}>
+                    <TableTd bold>{doctor.name}</TableTd>
+                    <TableTd>{doctor.specialty || '-'}</TableTd>
+                    <TableTd>{doctor.phone || '-'}</TableTd>
+                    <TableTd>
                       <Badge variant={doctor.isActive ? 'success' : 'danger'}>
                         {doctor.isActive ? 'Active' : 'Inactive'}
                       </Badge>
-                    </Table.Td>
-                    <Table.Td>
+                    </TableTd>
+                    <TableTd>
                       <button
                         onClick={() => { setEditingItem(doctor); setShowDoctorForm(true); }}
                         className="text-[#142A4E] hover:underline font-semibold mr-2"
@@ -629,19 +598,19 @@ export default function SettingsPage() {
                       >
                         Delete
                       </button>
-                    </Table.Td>
-                  </Table.Row>
+                    </TableTd>
+                  </TableRow>
                 ))
               ) : (
-                <Table.Empty colSpan={5}>No doctors found</Table.Empty>
+                <TableEmpty colSpan={5}>No doctors found</TableEmpty>
               )}
-            </Table.Body>
+            </TableBody>
           </Table>
 
           <Pagination
             currentPage={doctorPage}
             totalPages={doctorTotalPages}
-            onPageChange={(page) => fetchDoctors(page, doctorSearch)}
+            onPageChange={(page: number) => fetchDoctors(page, doctorSearch)}
           />
         </Card>
       )}
@@ -649,14 +618,13 @@ export default function SettingsPage() {
       {/* Medicines Tab */}
       {activeTab === 'medicines' && (
         <Card>
-          <Card.Header>
-            <Card.Title>Manage Medicines ({medicineCount})</Card.Title>
+          <CardHeader>
+            <CardTitle>Manage Medicines ({medicineCount})</CardTitle>
             <Button onClick={() => { setShowMedicineForm(!showMedicineForm); setEditingItem(null); }}>
               {showMedicineForm ? 'Cancel' : '+ Add Medicine'}
             </Button>
-          </Card.Header>
+          </CardHeader>
 
-          {/* Search Box */}
           <div className="mb-4">
             <div className="relative">
               <Search size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-[#ABAFB1]" />
@@ -699,24 +667,24 @@ export default function SettingsPage() {
           )}
 
           <Table>
-            <Table.Head>
+            <TableHead>
               <tr>
-                <Table.Th>Name</Table.Th>
-                <Table.Th>Description</Table.Th>
-                <Table.Th>Price (USD)</Table.Th>
-                <Table.Th>Price (KHR)</Table.Th>
-                <Table.Th>Actions</Table.Th>
+                <TableTh>Name</TableTh>
+                <TableTh>Description</TableTh>
+                <TableTh>Price (USD)</TableTh>
+                <TableTh>Price (KHR)</TableTh>
+                <TableTh>Actions</TableTh>
               </tr>
-            </Table.Head>
-            <Table.Body>
+            </TableHead>
+            <TableBody>
               {medicines.length > 0 ? (
-                medicines.map((medicine) => (
-                  <Table.Row key={medicine.id}>
-                    <Table.Td bold>{medicine.name}</Table.Td>
-                    <Table.Td>{medicine.description || '-'}</Table.Td>
-                    <Table.Td>${medicine.costUSD?.toFixed(2) || '0.00'}</Table.Td>
-                    <Table.Td>{medicine.costKHR?.toLocaleString() || '0'} ៛</Table.Td>
-                    <Table.Td>
+                medicines.map((medicine: any) => (
+                  <TableRow key={medicine.id}>
+                    <TableTd bold>{medicine.name}</TableTd>
+                    <TableTd>{medicine.description || '-'}</TableTd>
+                    <TableTd>${medicine.costUSD?.toFixed(2) || '0.00'}</TableTd>
+                    <TableTd>{medicine.costKHR?.toLocaleString() || '0'} ៛</TableTd>
+                    <TableTd>
                       <button
                         onClick={() => { setEditingItem(medicine); setShowMedicineForm(true); }}
                         className="text-[#142A4E] hover:underline font-semibold mr-2"
@@ -729,19 +697,19 @@ export default function SettingsPage() {
                       >
                         Delete
                       </button>
-                    </Table.Td>
-                  </Table.Row>
+                    </TableTd>
+                  </TableRow>
                 ))
               ) : (
-                <Table.Empty colSpan={5}>No medicines found</Table.Empty>
+                <TableEmpty colSpan={5}>No medicines found</TableEmpty>
               )}
-            </Table.Body>
+            </TableBody>
           </Table>
 
           <Pagination
             currentPage={medicinePage}
             totalPages={medicineTotalPages}
-            onPageChange={(page) => fetchMedicines(page, medicineSearch)}
+            onPageChange={(page: number) => fetchMedicines(page, medicineSearch)}
           />
         </Card>
       )}
@@ -749,14 +717,13 @@ export default function SettingsPage() {
       {/* Diagnoses Tab */}
       {activeTab === 'diagnoses' && (
         <Card>
-          <Card.Header>
-            <Card.Title>Manage Diagnoses ({diagnosisCount})</Card.Title>
+          <CardHeader>
+            <CardTitle>Manage Diagnoses ({diagnosisCount})</CardTitle>
             <Button onClick={() => { setShowDiagnosisForm(!showDiagnosisForm); setEditingItem(null); }}>
               {showDiagnosisForm ? 'Cancel' : '+ Add Diagnosis'}
             </Button>
-          </Card.Header>
+          </CardHeader>
 
-          {/* Search Box */}
           <div className="mb-4">
             <div className="relative">
               <Search size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-[#ABAFB1]" />
@@ -782,18 +749,18 @@ export default function SettingsPage() {
           )}
 
           <Table>
-            <Table.Head>
+            <TableHead>
               <tr>
-                <Table.Th>Name</Table.Th>
-                <Table.Th>Actions</Table.Th>
+                <TableTh>Name</TableTh>
+                <TableTh>Actions</TableTh>
               </tr>
-            </Table.Head>
-            <Table.Body>
+            </TableHead>
+            <TableBody>
               {diagnoses.length > 0 ? (
-                diagnoses.map((diagnosis) => (
-                  <Table.Row key={diagnosis.id}>
-                    <Table.Td bold>{diagnosis.name}</Table.Td>
-                    <Table.Td>
+                diagnoses.map((diagnosis: any) => (
+                  <TableRow key={diagnosis.id}>
+                    <TableTd bold>{diagnosis.name}</TableTd>
+                    <TableTd>
                       <button
                         onClick={() => { setEditingItem(diagnosis); setShowDiagnosisForm(true); }}
                         className="text-[#142A4E] hover:underline font-semibold mr-2"
@@ -806,19 +773,19 @@ export default function SettingsPage() {
                       >
                         Delete
                       </button>
-                    </Table.Td>
-                  </Table.Row>
+                    </TableTd>
+                  </TableRow>
                 ))
               ) : (
-                <Table.Empty colSpan={2}>No diagnoses found</Table.Empty>
+                <TableEmpty colSpan={2}>No diagnoses found</TableEmpty>
               )}
-            </Table.Body>
+            </TableBody>
           </Table>
 
           <Pagination
             currentPage={diagnosisPage}
             totalPages={diagnosisTotalPages}
-            onPageChange={(page) => fetchDiagnoses(page, diagnosisSearch)}
+            onPageChange={(page: number) => fetchDiagnoses(page, diagnosisSearch)}
           />
         </Card>
       )}
@@ -826,14 +793,13 @@ export default function SettingsPage() {
       {/* Users Tab */}
       {activeTab === 'users' && (
         <Card>
-          <Card.Header>
-            <Card.Title>Manage Users ({userCount})</Card.Title>
+          <CardHeader>
+            <CardTitle>Manage Users ({userCount})</CardTitle>
             <Button onClick={() => { setShowUserForm(!showUserForm); setEditingItem(null); }}>
               {showUserForm ? 'Cancel' : '+ Add User'}
             </Button>
-          </Card.Header>
+          </CardHeader>
 
-          {/* Search Box */}
           <div className="mb-4">
             <div className="relative">
               <Search size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-[#ABAFB1]" />
@@ -872,26 +838,26 @@ export default function SettingsPage() {
           )}
 
           <Table>
-            <Table.Head>
+            <TableHead>
               <tr>
-                <Table.Th>Name</Table.Th>
-                <Table.Th>Email</Table.Th>
-                <Table.Th>Role</Table.Th>
-                <Table.Th>Actions</Table.Th>
+                <TableTh>Name</TableTh>
+                <TableTh>Email</TableTh>
+                <TableTh>Role</TableTh>
+                <TableTh>Actions</TableTh>
               </tr>
-            </Table.Head>
-            <Table.Body>
+            </TableHead>
+            <TableBody>
               {users.length > 0 ? (
-                users.map((user) => (
-                  <Table.Row key={user.id}>
-                    <Table.Td bold>{user.name}</Table.Td>
-                    <Table.Td>{user.email}</Table.Td>
-                    <Table.Td>
+                users.map((user: any) => (
+                  <TableRow key={user.id}>
+                    <TableTd bold>{user.name}</TableTd>
+                    <TableTd>{user.email}</TableTd>
+                    <TableTd>
                       <Badge variant={user.role === 'ADMIN' ? 'success' : 'pending'}>
                         {user.role}
                       </Badge>
-                    </Table.Td>
-                    <Table.Td>
+                    </TableTd>
+                    <TableTd>
                       <button
                         onClick={() => { setEditingItem(user); setShowUserForm(true); }}
                         className="text-[#142A4E] hover:underline font-semibold mr-2"
@@ -904,19 +870,19 @@ export default function SettingsPage() {
                       >
                         Delete
                       </button>
-                    </Table.Td>
-                  </Table.Row>
+                    </TableTd>
+                  </TableRow>
                 ))
               ) : (
-                <Table.Empty colSpan={4}>No users found</Table.Empty>
+                <TableEmpty colSpan={4}>No users found</TableEmpty>
               )}
-            </Table.Body>
+            </TableBody>
           </Table>
 
           <Pagination
             currentPage={userPage}
             totalPages={userTotalPages}
-            onPageChange={(page) => fetchUsers(page, userSearch)}
+            onPageChange={(page: number) => fetchUsers(page, userSearch)}
           />
         </Card>
       )}

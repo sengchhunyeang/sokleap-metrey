@@ -5,6 +5,7 @@ import { useSession, signOut } from 'next-auth/react';
 import Link from 'next/link';
 import { Menu } from 'react-feather';
 import { Modal, Button } from '@/app/components/ui';
+import { ModalFooter } from '@/app/components/ui/Modal';
 
 export default function Navbar({ onMenuClick }) {
   const { data: session } = useSession();
@@ -32,7 +33,7 @@ export default function Navbar({ onMenuClick }) {
 
             {/* Logo */}
             <Link href="/" className="flex items-center">
-              <img src="/logo/left.png" alt="Logo" className="h-10 w-auto" />
+              <img src="https://images.ctfassets.net/k428n7s2pxlu/5vSBjMQXNS4sUu0USKIQiE/ac4a36419d7937a7c07e01b56241db2d/blog-post-blog-angular-part-1-why-choose-angular.jpg" alt="Logo" className="h-10 w-auto" />
             </Link>
           </div>
 
@@ -63,7 +64,7 @@ export default function Navbar({ onMenuClick }) {
         <p className="text-[14px] text-[#5E6366]">
           Are you sure you want to sign out?
         </p>
-        <Modal.Footer>
+        <ModalFooter>
           <Button
             variant="secondary"
             onClick={() => setShowLogoutModal(false)}
@@ -78,7 +79,7 @@ export default function Navbar({ onMenuClick }) {
           >
             Yes
           </Button>
-        </Modal.Footer>
+        </ModalFooter>
       </Modal>
     </nav>
   );
