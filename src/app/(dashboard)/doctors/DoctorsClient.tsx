@@ -4,7 +4,6 @@ import { useState, useRef } from 'react';
 import { UserPlus, Edit2, Trash2, Search } from 'react-feather';
 import { Button, Input, Card, Table, Badge, Pagination } from '@/app/components/ui';
 import { CardHeader, CardTitle } from '@/app/components/ui/Card';
-import { TableHead, TableBody, TableRow, TableTh, TableTd, TableEmpty } from '@/app/components/ui/Table';
 import { SkeletonTableRows } from '@/app/components/ui/Skeleton';
 import type { Doctor, PaginationData } from '@/types';
 
@@ -196,32 +195,32 @@ export default function DoctorsClient({ initialDoctors, initialPagination }: Doc
 
       <Card>
         <Table>
-          <TableHead>
+          <Table.Head>
             <tr>
-              <TableTh>Name</TableTh>
-              <TableTh>Specialty</TableTh>
-              <TableTh>Phone</TableTh>
-              <TableTh>Status</TableTh>
-              <TableTh>Actions</TableTh>
+              <Table.Th>Name</Table.Th>
+              <Table.Th>Specialty</Table.Th>
+              <Table.Th>Phone</Table.Th>
+              <Table.Th>Status</Table.Th>
+              <Table.Th>Actions</Table.Th>
             </tr>
-          </TableHead>
-          <TableBody>
+          </Table.Head>
+          <Table.Body>
             {loading ? (
               <SkeletonTableRows rows={10} cols={5} />
             ) : doctors.length > 0 ? (
               doctors.map((doctor) => (
-                <TableRow key={doctor.id}>
-                  <TableTd bold>{doctor.name}</TableTd>
-                  <TableTd>{doctor.specialty || '-'}</TableTd>
-                  <TableTd>{doctor.phone || '-'}</TableTd>
-                  <TableTd>
+                <Table.Row key={doctor.id}>
+                  <Table.Td bold>{doctor.name}</Table.Td>
+                  <Table.Td>{doctor.specialty || '-'}</Table.Td>
+                  <Table.Td>{doctor.phone || '-'}</Table.Td>
+                  <Table.Td>
                     <button onClick={() => toggleActive(doctor)}>
                       <Badge variant={doctor.isActive ? 'success' : 'danger'}>
                         {doctor.isActive ? 'Active' : 'Inactive'}
                       </Badge>
                     </button>
-                  </TableTd>
-                  <TableTd>
+                  </Table.Td>
+                  <Table.Td>
                     <button
                       onClick={() => handleEdit(doctor)}
                       className="inline-flex items-center gap-1 text-[#142A4E] hover:underline font-semibold mr-3"
@@ -236,15 +235,15 @@ export default function DoctorsClient({ initialDoctors, initialPagination }: Doc
                       <Trash2 size={14} />
                       Delete
                     </button>
-                  </TableTd>
-                </TableRow>
+                  </Table.Td>
+                </Table.Row>
               ))
             ) : (
-              <TableEmpty colSpan={5}>
+              <Table.Empty colSpan={5}>
                 No doctors found.
-              </TableEmpty>
+              </Table.Empty>
             )}
-          </TableBody>
+          </Table.Body>
         </Table>
       </Card>
 

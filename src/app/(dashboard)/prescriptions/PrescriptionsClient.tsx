@@ -4,7 +4,6 @@ import { useState, useRef } from 'react';
 import Link from 'next/link';
 import { FilePlus, Eye, Trash2, Search, Edit2, Printer } from 'react-feather';
 import { Button, Card, Table, Badge, Pagination } from '@/app/components/ui';
-import { TableHead, TableBody, TableRow, TableTh, TableTd, TableEmpty } from '@/app/components/ui/Table';
 import { SkeletonTableRows } from '@/app/components/ui/Skeleton';
 import type { PrescriptionWithRelations, PaginationData } from '@/types';
 
@@ -96,26 +95,26 @@ export default function PrescriptionsClient({ initialPrescriptions, initialPagin
 
       <Card>
         <Table>
-          <TableHead>
+          <Table.Head>
             <tr>
-              <TableTh>Date</TableTh>
-              <TableTh>NSSF ID</TableTh>
-              <TableTh>Patient</TableTh>
-              <TableTh>Doctor</TableTh>
-              <TableTh>Diagnosis</TableTh>
-              <TableTh>Medicines</TableTh>
-              <TableTh>Actions</TableTh>
+              <Table.Th>Date</Table.Th>
+              <Table.Th>NSSF ID</Table.Th>
+              <Table.Th>Patient</Table.Th>
+              <Table.Th>Doctor</Table.Th>
+              <Table.Th>Diagnosis</Table.Th>
+              <Table.Th>Medicines</Table.Th>
+              <Table.Th>Actions</Table.Th>
             </tr>
-          </TableHead>
-          <TableBody>
+          </Table.Head>
+          <Table.Body>
             {loading ? (
               <SkeletonTableRows rows={10} cols={7} />
             ) : prescriptions.length > 0 ? (
               prescriptions.map((prescription) => (
-                <TableRow key={prescription.id}>
-                  <TableTd>{new Date(prescription.createdAt).toLocaleDateString()}</TableTd>
-                  <TableTd bold>{prescription.patient?.nssfId || '-'}</TableTd>
-                  <TableTd>
+                <Table.Row key={prescription.id}>
+                  <Table.Td>{new Date(prescription.createdAt).toLocaleDateString()}</Table.Td>
+                  <Table.Td bold>{prescription.patient?.nssfId || '-'}</Table.Td>
+                  <Table.Td>
                     <div>
                       <span className="font-semibold text-[#050505]">
                         {prescription.patient?.khmerName || prescription.patient?.name}
@@ -126,15 +125,15 @@ export default function PrescriptionsClient({ initialPrescriptions, initialPagin
                         </span>
                       )}
                     </div>
-                  </TableTd>
-                  <TableTd>{prescription.doctor?.name}</TableTd>
-                  <TableTd>{prescription.diagnosis}</TableTd>
-                  <TableTd>
+                  </Table.Td>
+                  <Table.Td>{prescription.doctor?.name}</Table.Td>
+                  <Table.Td>{prescription.diagnosis}</Table.Td>
+                  <Table.Td>
                     <Badge variant="default">
                       {prescription.medicines?.length || 0}
                     </Badge>
-                  </TableTd>
-                  <TableTd>
+                  </Table.Td>
+                  <Table.Td>
                     <Link
                       href={`/prescriptions/${prescription.id}`}
                       className="inline-flex items-center gap-1 text-[#142A4E] hover:underline font-semibold mr-3"
@@ -163,11 +162,11 @@ export default function PrescriptionsClient({ initialPrescriptions, initialPagin
                       <Trash2 size={14} />
                       Delete
                     </button>
-                  </TableTd>
-                </TableRow>
+                  </Table.Td>
+                </Table.Row>
               ))
             ) : (
-              <TableEmpty colSpan={7}>
+              <Table.Empty colSpan={7}>
                 {search ? (
                   <span>No prescriptions found for &quot;{search}&quot;</span>
                 ) : (
@@ -178,9 +177,9 @@ export default function PrescriptionsClient({ initialPrescriptions, initialPagin
                     </Link>
                   </>
                 )}
-              </TableEmpty>
+              </Table.Empty>
             )}
-          </TableBody>
+          </Table.Body>
         </Table>
       </Card>
 

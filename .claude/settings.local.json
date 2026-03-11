@@ -23,7 +23,28 @@
       "Bash(npx kill-port:*)",
       "Bash(Get-Content \"D:\\\\Testing\\\\sokleap-metrey\\\\Diagnosis_List.csv\")",
       "Bash(Measure-Object -Line)",
-      "Bash(npm run db:import-diagnoses:*)"
+      "Bash(npm run db:import-diagnoses:*)",
+      "Bash(dir:*)",
+      "Bash(Get-ChildItem -Path \"D:\\\\Testing\\\\sokleap-metrey\\\\src\\\\app\" -Recurse -Filter \"page.*\")",
+      "Bash(Select-Object FullName)",
+      "Bash(npx next build:*)",
+      "Bash(npx next lint:*)",
+      "Bash(node:*)",
+      "Bash(del \"D:\\\\Testing\\\\sokleap-metrey\\\\jsconfig.json\")",
+      "Bash(find:*)",
+      "Bash(taskkill:*)",
+      "Bash(powershell -Command \"Get-Content ''C:\\\\Users\\\\SCB48~1.CHH\\\\AppData\\\\Local\\\\Temp\\\\claude\\\\D--Testing-sokleap-metrey\\\\tasks\\\\b4db149.output'' | Select-Object -Last 10\")",
+      "Bash(powershell -Command:*)",
+      "Bash(rd /s /q \"D:\\\\Testing\\\\sokleap-metrey\\\\.next\")",
+      "Bash(if exist \"D:\\\\Testing\\\\sokleap-metrey\\\\.next\" rmdir /s /q \"D:\\\\Testing\\\\sokleap-metrey\\\\.next\")",
+      "Bash(if exist .next rmdir /s /q .next)",
+      "Bash(python3:*)",
+      "Bash(npx prisma db seed:*)",
+      "Bash(tasklist:*)",
+      "Bash(ls:*)",
+      "Bash(head:*)",
+      "Bash(git checkout:*)",
+      "Bash(git add:*)"
     ]
   }
 }

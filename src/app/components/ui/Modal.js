@@ -33,10 +33,10 @@ export default function Modal({ isOpen, onClose, title, children, className = ''
   );
 }
 
-Modal.Footer = function ModalFooter({ children, className = '' }) {
+export function ModalFooter({ children, className = '' }) {
   return (
     <div className={`flex justify-end gap-2 pt-4 border-t border-[#ABAFB1] mt-4 ${className}`}>
       {children}
     </div>
   );
-};
+}

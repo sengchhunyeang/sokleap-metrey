@@ -6,11 +6,11 @@ export const getApiDocs = () => {
     definition: {
       openapi: '3.0.0',
       info: {
-        title: 'Sokleap Metrey API Documentation',
+        title: 'Next.js API Documentation',
         version: '1.0.0',
         description: 'Medical Prescription Management System API',
         contact: {
-          name: 'Sokleap Metrey',
+          name: 'Next.js',
           email: 'admin@sokleap.com',
         },
       },

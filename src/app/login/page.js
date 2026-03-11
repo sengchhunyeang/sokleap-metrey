@@ -70,10 +70,8 @@ export default function LoginPage() {
     <div className="min-h-screen bg-[#F5F5FA] flex items-center justify-center p-4">
       <Card className="w-full max-w-md p-8">
         <div className="text-center mb-8">
-          <h1 className="text-[20px] font-bold text-[#142A4E]">
-            មន្ទីរពហុព្យាបាល សុខ លាភ មេត្រី
-          </h1>
-          <p className="text-[#5E6366] mt-1 text-[14px]">SOK LEAP METREY POLYCLINIC</p>
+          <img src="/next.svg" alt="Next.js Logo" className="h-10 mx-auto mb-2" />
+          <p className="text-[#5E6366] mt-1 text-[14px]">Next.js</p>
         </div>
 
         <h2 className="text-[18px] font-semibold text-center mb-6 text-[#050505]">

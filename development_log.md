@@ -90,3 +90,57 @@ npm run db:studio    # Open Prisma Studio
   - Each medicine displayed as a compact row with inline inputs
   - Delete button on each row
   - Empty state with centered "Add Medicine" button
+
+### 2026-01-29 — Performance & UX Optimization
+
+#### 1. Page-Level Optimizations
+- **Dashboard → Server Component**: Removed `'use client'`, `useState`, `useEffect`; queries Prisma directly in async component body. No more client-side fetch for stats.
+- **Patients list**: Fixed double-fetch bug — removed redundant `useEffect([page])` that fired alongside the pagination handler's direct `fetchPatients()` call.
+- **Doctors list**: Removed redundant initial-load `useEffect`; consolidated separate `total`/`totalPages` states into single `pagination` object.
+- **Prescriptions list**: Same consolidation as doctors — merged pagination state, removed redundant useEffect.
+- **Prescription detail**: Added `useMemo` for invoice total calculation (`totalKHR`) to avoid recalculating on every render.
+
+#### 2. Build & Runtime Optimization
+- **next.config.mjs** fully optimized:
+  - `compress: true`, `poweredByHeader: false`, `reactStrictMode: true`
+  - `serverExternalPackages`: `@prisma/client`, `bcryptjs`, `xlsx`, `swagger-jsdoc`, `next-swagger-doc` (prevents server-only code leaking into client bundle)
+  - Image optimization with `avif`/`webp` formats
+  - Cache headers: 1-year immutable for `/_next/static/`, 1-hour for images
+  - Security headers: `X-Content-Type-Options`, `X-Frame-Options`, `Referrer-Policy`
+  - `output: 'standalone'` for minimal production deploys
+  - Lazy `@next/bundle-analyzer` integration (only loads when `ANALYZE=true`)
+- **Removed 16 unused dependencies** (93 packages total removed from node_modules):
+  - All `@radix-ui/*` packages (25), `lucide-react`, `cmdk`, `date-fns`, `react-day-picker`, `next-themes`, `sonner`, `class-variance-authority`, `react-hook-form`, `@hookform/resolvers`, `zod`
+- **Deleted unused code**:
+  - `src/components/ui/` — 40 shadcn component files (app uses `src/app/components/ui/` instead)
+  - `components.json` — shadcn CLI config
+  - `src/hooks/` — 4 unused custom hooks (`useApi`, `useDebounce`, `useFetch`, `usePagination`)
+  - `src/lib/utils.js` — `cn()` utility only used by deleted shadcn components
+- **Font optimization**: Trimmed Inter weights from 7 (`100`–`700`) to 4 (`400`, `500`, `600`, `700`)
+- Added `analyze` and `analyze:win` npm scripts for bundle visualization
+
+#### 3. UX Performance — Skeleton Loaders & Suspense
+- **Created `Skeleton.js` component** (`src/app/components/ui/Skeleton.js`) with composable primitives:
+  - `Skeleton` — base animated pulse block
+  - `Skeleton.TableRow` / `Skeleton.TableRows` — configurable row/col skeleton rows
+  - `Skeleton.StatCard` — matches dashboard stat card dimensions
+  - `Skeleton.Card` — card with header + body line placeholders
+  - `Skeleton.DetailPage` — back link + two-column grid layout skeleton
+- **Created 7 route-level `loading.js` files** with layout-matching skeletons:
+  - `(dashboard)/loading.js` — 4 stat cards + quick actions + table
+  - `(dashboard)/patients/loading.js` — header + search + 6-col table
+  - `(dashboard)/doctors/loading.js` — header + search + 5-col table
+  - `(dashboard)/prescriptions/loading.js` — header + search + 7-col table
+  - `(dashboard)/patients/[id]/loading.js` — detail page skeleton
+  - `(dashboard)/prescriptions/[id]/loading.js` — prescription document skeleton
+  - `(dashboard)/settings/loading.js` — tabs + card + table skeleton
+- **Replaced all inline `<Loading>` spinners** in 5 client pages with `<Skeleton.TableRows>` inside always-visible table structures (table headers remain visible → no layout shift)
+- **Dashboard Suspense streaming**: Split `RecentPrescriptions` into a separate async component wrapped in `<Suspense fallback={<RecentPrescriptionsFallback />}>` — stat cards render instantly while the table streams in
+- Exported `Skeleton` from `src/app/components/ui/index.js`
+
+
+Pending Task :
+To significantly improve performance, I recommend:
+   * Converting these pages to Server Components to fetch data directly from Prisma on the server.
+   * Implementing Streaming with Suspense to show immediate UI while data is loading.
+   * Checking the database indexes in prisma/schema.prisma to ensure queries are optimized.

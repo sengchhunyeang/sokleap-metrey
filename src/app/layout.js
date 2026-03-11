@@ -5,15 +5,15 @@ import AuthProvider from "./components/AuthProvider";
 const kantumruyPro = Kantumruy_Pro({
   variable: "--font-kantumruy",
   subsets: ["latin", "khmer"],
-  weight: ["100", "200", "300", "400", "500", "600", "700"],
+  weight: ["400", "500", "600", "700"],
 });
 
 export const metadata = {
-  title: "SOK LEAP METREY POLYCLINIC",
+  title: "Next.js",
   description: "Clinic Management System",
   icons: {
-    icon: "/logo/left.png",
-    apple: "/logo/left.png",
+    icon: "/next.svg",
+    apple: "/next.svg",
   },
 };
 

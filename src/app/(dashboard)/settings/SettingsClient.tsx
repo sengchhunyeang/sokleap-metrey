@@ -15,7 +15,6 @@ import {
   Pagination,
 } from '@/app/components/ui';
 import { CardHeader, CardTitle } from '@/app/components/ui/Card';
-import { TableHead, TableBody, TableRow, TableTh, TableTd, TableEmpty } from '@/app/components/ui/Table';
 
 interface SettingsInitialData {
   doctors: any[];
@@ -478,36 +477,36 @@ export default function SettingsClient({ initialData }: SettingsClientProps) {
           </div>
 
           <Table>
-            <TableHead>
+            <Table.Head>
               <tr>
-                <TableTh>NSSF ID</TableTh>
-                <TableTh>Name (Latin)</TableTh>
-                <TableTh>Khmer Name</TableTh>
-                <TableTh>Gender</TableTh>
-                <TableTh>Age</TableTh>
+                <Table.Th>NSSF ID</TableTh>
+                <Table.Th>Name (Latin)</TableTh>
+                <Table.Th>Khmer Name</TableTh>
+                <Table.Th>Gender</TableTh>
+                <Table.Th>Age</TableTh>
               </tr>
-            </TableHead>
-            <TableBody>
+            </Table.Head>
+            <Table.Body>
               {patients.length > 0 ? (
                 patients.map((patient: any) => (
-                  <TableRow key={patient.id}>
-                    <TableTd bold>{patient.nssfId || '-'}</TableTd>
-                    <TableTd>{patient.nameLatin || patient.name}</TableTd>
-                    <TableTd>{patient.khmerName || '-'}</TableTd>
-                    <TableTd>
+                  <Table.Row key={patient.id}>
+                    <Table.Td bold>{patient.nssfId || '-'}</TableTd>
+                    <Table.Td>{patient.nameLatin || patient.name}</TableTd>
+                    <Table.Td>{patient.khmerName || '-'}</TableTd>
+                    <Table.Td>
                       <Badge variant={patient.gender === 'MALE' ? 'pending' : 'success'}>
                         {patient.gender}
                       </Badge>
                     </TableTd>
-                    <TableTd>{patient.age}</TableTd>
-                  </TableRow>
+                    <Table.Td>{patient.age}</TableTd>
+                  </Table.Row>
                 ))
               ) : (
-                <TableEmpty colSpan={5}>
+                <Table.Empty colSpan={5}>
                   No patients found. Upload an Excel file to import patients.
-                </TableEmpty>
+                </Table.Empty>
               )}
-            </TableBody>
+            </Table.Body>
           </Table>
 
           <Pagination
@@ -564,28 +563,28 @@ export default function SettingsClient({ initialData }: SettingsClientProps) {
           )}
 
           <Table>
-            <TableHead>
+            <Table.Head>
               <tr>
-                <TableTh>Name</TableTh>
-                <TableTh>Specialty</TableTh>
-                <TableTh>Phone</TableTh>
-                <TableTh>Status</TableTh>
-                <TableTh>Actions</TableTh>
+                <Table.Th>Name</TableTh>
+                <Table.Th>Specialty</TableTh>
+                <Table.Th>Phone</TableTh>
+                <Table.Th>Status</TableTh>
+                <Table.Th>Actions</TableTh>
               </tr>
-            </TableHead>
-            <TableBody>
+            </Table.Head>
+            <Table.Body>
               {doctors.length > 0 ? (
                 doctors.map((doctor: any) => (
-                  <TableRow key={doctor.id}>
-                    <TableTd bold>{doctor.name}</TableTd>
-                    <TableTd>{doctor.specialty || '-'}</TableTd>
-                    <TableTd>{doctor.phone || '-'}</TableTd>
-                    <TableTd>
+                  <Table.Row key={doctor.id}>
+                    <Table.Td bold>{doctor.name}</TableTd>
+                    <Table.Td>{doctor.specialty || '-'}</TableTd>
+                    <Table.Td>{doctor.phone || '-'}</TableTd>
+                    <Table.Td>
                       <Badge variant={doctor.isActive ? 'success' : 'danger'}>
                         {doctor.isActive ? 'Active' : 'Inactive'}
                       </Badge>
                     </TableTd>
-                    <TableTd>
+                    <Table.Td>
                       <button
                         onClick={() => { setEditingItem(doctor); setShowDoctorForm(true); }}
                         className="text-[#142A4E] hover:underline font-semibold mr-2"
@@ -599,12 +598,12 @@ export default function SettingsClient({ initialData }: SettingsClientProps) {
                         Delete
                       </button>
                     </TableTd>
-                  </TableRow>
+                  </Table.Row>
                 ))
               ) : (
-                <TableEmpty colSpan={5}>No doctors found</TableEmpty>
+                <Table.Empty colSpan={5}>No doctors found</Table.Empty>
               )}
-            </TableBody>
+            </Table.Body>
           </Table>
 
           <Pagination
@@ -667,24 +666,24 @@ export default function SettingsClient({ initialData }: SettingsClientProps) {
           )}
 
           <Table>
-            <TableHead>
+            <Table.Head>
               <tr>
-                <TableTh>Name</TableTh>
-                <TableTh>Description</TableTh>
-                <TableTh>Price (USD)</TableTh>
-                <TableTh>Price (KHR)</TableTh>
-                <TableTh>Actions</TableTh>
+                <Table.Th>Name</TableTh>
+                <Table.Th>Description</TableTh>
+                <Table.Th>Price (USD)</TableTh>
+                <Table.Th>Price (KHR)</TableTh>
+                <Table.Th>Actions</TableTh>
               </tr>
-            </TableHead>
-            <TableBody>
+            </Table.Head>
+            <Table.Body>
               {medicines.length > 0 ? (
                 medicines.map((medicine: any) => (
-                  <TableRow key={medicine.id}>
-                    <TableTd bold>{medicine.name}</TableTd>
-                    <TableTd>{medicine.description || '-'}</TableTd>
-                    <TableTd>${medicine.costUSD?.toFixed(2) || '0.00'}</TableTd>
-                    <TableTd>{medicine.costKHR?.toLocaleString() || '0'} ៛</TableTd>
-                    <TableTd>
+                  <Table.Row key={medicine.id}>
+                    <Table.Td bold>{medicine.name}</TableTd>
+                    <Table.Td>{medicine.description || '-'}</TableTd>
+                    <Table.Td>${medicine.costUSD?.toFixed(2) || '0.00'}</TableTd>
+                    <Table.Td>{medicine.costKHR?.toLocaleString() || '0'} ៛</TableTd>
+                    <Table.Td>
                       <button
                         onClick={() => { setEditingItem(medicine); setShowMedicineForm(true); }}
                         className="text-[#142A4E] hover:underline font-semibold mr-2"
@@ -698,12 +697,12 @@ export default function SettingsClient({ initialData }: SettingsClientProps) {
                         Delete
                       </button>
                     </TableTd>
-                  </TableRow>
+                  </Table.Row>
                 ))
               ) : (
-                <TableEmpty colSpan={5}>No medicines found</TableEmpty>
+                <Table.Empty colSpan={5}>No medicines found</Table.Empty>
               )}
-            </TableBody>
+            </Table.Body>
           </Table>
 
           <Pagination
@@ -749,18 +748,18 @@ export default function SettingsClient({ initialData }: SettingsClientProps) {
           )}
 
           <Table>
-            <TableHead>
+            <Table.Head>
               <tr>
-                <TableTh>Name</TableTh>
-                <TableTh>Actions</TableTh>
+                <Table.Th>Name</TableTh>
+                <Table.Th>Actions</TableTh>
               </tr>
-            </TableHead>
-            <TableBody>
+            </Table.Head>
+            <Table.Body>
               {diagnoses.length > 0 ? (
                 diagnoses.map((diagnosis: any) => (
-                  <TableRow key={diagnosis.id}>
-                    <TableTd bold>{diagnosis.name}</TableTd>
-                    <TableTd>
+                  <Table.Row key={diagnosis.id}>
+                    <Table.Td bold>{diagnosis.name}</TableTd>
+                    <Table.Td>
                       <button
                         onClick={() => { setEditingItem(diagnosis); setShowDiagnosisForm(true); }}
                         className="text-[#142A4E] hover:underline font-semibold mr-2"
@@ -774,12 +773,12 @@ export default function SettingsClient({ initialData }: SettingsClientProps) {
                         Delete
                       </button>
                     </TableTd>
-                  </TableRow>
+                  </Table.Row>
                 ))
               ) : (
-                <TableEmpty colSpan={2}>No diagnoses found</TableEmpty>
+                <Table.Empty colSpan={2}>No diagnoses found</Table.Empty>
               )}
-            </TableBody>
+            </Table.Body>
           </Table>
 
           <Pagination
@@ -838,26 +837,26 @@ export default function SettingsClient({ initialData }: SettingsClientProps) {
           )}
 
           <Table>
-            <TableHead>
+            <Table.Head>
               <tr>
-                <TableTh>Name</TableTh>
-                <TableTh>Email</TableTh>
-                <TableTh>Role</TableTh>
-                <TableTh>Actions</TableTh>
+                <Table.Th>Name</TableTh>
+                <Table.Th>Email</TableTh>
+                <Table.Th>Role</TableTh>
+                <Table.Th>Actions</TableTh>
               </tr>
-            </TableHead>
-            <TableBody>
+            </Table.Head>
+            <Table.Body>
               {users.length > 0 ? (
                 users.map((user: any) => (
-                  <TableRow key={user.id}>
-                    <TableTd bold>{user.name}</TableTd>
-                    <TableTd>{user.email}</TableTd>
-                    <TableTd>
+                  <Table.Row key={user.id}>
+                    <Table.Td bold>{user.name}</TableTd>
+                    <Table.Td>{user.email}</TableTd>
+                    <Table.Td>
                       <Badge variant={user.role === 'ADMIN' ? 'success' : 'pending'}>
                         {user.role}
                       </Badge>
                     </TableTd>
-                    <TableTd>
+                    <Table.Td>
                       <button
                         onClick={() => { setEditingItem(user); setShowUserForm(true); }}
                         className="text-[#142A4E] hover:underline font-semibold mr-2"
@@ -871,12 +870,12 @@ export default function SettingsClient({ initialData }: SettingsClientProps) {
                         Delete
                       </button>
                     </TableTd>
-                  </TableRow>
+                  </Table.Row>
                 ))
               ) : (
-                <TableEmpty colSpan={4}>No users found</TableEmpty>
+                <Table.Empty colSpan={4}>No users found</Table.Empty>
               )}
-            </TableBody>
+            </Table.Body>
           </Table>
 
           <Pagination

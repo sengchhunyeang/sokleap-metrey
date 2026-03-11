@@ -189,13 +189,11 @@ export default function PrescriptionForm({ onSave, initialData = {} }) {
 
       <div className="max-w-4xl mx-auto bg-white shadow-md rounded-lg p-6">
         <header className="flex items-center justify-between">
-          <img src="/logo/left.png" alt="Left Logo" className="h-16" />
+          <img src="/next.svg" alt="Next.js Logo" className="h-12" />
           <div className="text-center font-bold text-xl">
-            មន្ទីរពហុព្យាបាល សុខ លាភ មេត្រី
-            <br />
-            SOK LEAP METREY POLYCLINIC
+            Next.js
           </div>
-          <img src="/logo/right.png" alt="Right Logo" className="h-16" />
+          <img src="/next.svg" alt="Next.js Logo" className="h-12" />
         </header>
 
         <h1 className="text-2xl font-bold my-6 text-center">
